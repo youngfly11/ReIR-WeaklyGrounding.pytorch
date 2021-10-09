@@ -1,0 +1,118 @@
+MODEL:
+  META_ARCHITECTURE: "GeneralizedRCNN"
+  RPN:
+    PRE_NMS_TOPK_TEST: 6000
+    POST_NMS_TOPK_TEST: 1000
+  ROI_HEADS:
+    NAME: "StandardPooler"
+  WEIGHTS: ""
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 101
+  PRINT_WINDOWSIZE:
+    VIS_TRAIN: 100
+    VIS_TEST: 100
+  VG:
+    SPATIAL_FEAT: True
+    PHRASE_SELECT_TYPE: "Sum"
+    VOCAB_PHR_FILE: "./flickr30k_datasets/skip-thoughts/vocab_phr.json"
+    VOCAB_FILE: "./flickr30k_datasets/skip-thoughts/vocab.json"
+    GLOVE_DICT_FILE: './flickr30k_datasets/flickr30k_anno/skip_thoughts_dict.pkl'
+    VOCAB_EMBEDDING_FILE: './flickr30k_datasets/flickr30k_anno/skip_vocab_embed.pkl'
+    VOCAB_REL_FILE: "./flickr30k_datasets/skip-thoughts/vocab_rel.json"
+    ATTR_DICT_PATH: ''
+    ATTR_VOCAB_PATH: ''
+    MAX_PHRASE_LEN: 5
+    EVAL_THRESH: 0.5
+    PRECOMP_TOPK: 30
+    USING_ELMO: False
+    EMBEDDING_SOURCE: 'Sent'
+    LSTM_BIDIRECTION: False
+    USING_DET_KNOWLEDGE: False
+    USING_DET_SCORE: False
+    NUM_CST_PHR: 1
+    USING_CST_RCONST: False
+    S2_TOPK: 10
+    S3_TOPK: 6
+    REGRESSION: False
+    ML_REG: False
+    REG_LOSS_FACTOR: 0.1
+    REG_IOU: 0.7
+    NON_MAX_REG_LOSS: False
+    REG_GAP_SCORE: 0.3
+    NETWORK: 'Baseline'
+    REG_THRESH: 0.5
+    LOSS_STAGE_FACTOR: 0.5
+    ATTR_LOSS_FACTOR: 1.0
+    REL_CLS_LOSS_FACTOR: 1.0
+    SEMANTIC_NOUNS_TOPK: 600
+    SEMANTIC_NOUNS_PATH: './flickr30k_datasets/flickr30k_anno/noun_cates.json'
+    SEMANTIC_ATTR_TOPK: 79
+    SEMANTIC_ATTR_PATH: './flickr30k_datasets/flickr30k_anno/attr_cates.json'
+    SEM_NOUNS_LOSS_FACTOR: 1.0
+    MESSAGE_PARAM: False
+
+  RELATION:
+    IS_ON: False
+    INTRA_LAN: False
+    VIG_ON: False
+    JOINT_TRANS: False
+    REL_CATE_PATH: './flickr30k_datasets/flickr30k_anno/rel_cates.json'
+    REL_LOSS_FACTOR: 1.0
+
+
+  ROI_BOX_HEAD:
+    POOLER_RESOLUTION: 7
+    POOLER_SAMPLING_RATIO: 2
+
+  BACKBONE:
+    NAME: "build_resnet101_backbone"
+    PRETRAIN_PATH: './flickr30k_datasets/bottom-up-pretrained/bottomup_pretrained_10_100.pth'
+    PRETRAIN_CLSW_PATH: './flickr30k_datasets/bottom-up-pretrained/bottomup_pretrained_clsw.pth'
+    LAST_LAYER_STRIDE: 1
+
+DATALOADER:
+  ASPECT_RATIO_GROUPING: True
+
+DATASETS:
+  TRAIN: ("flickr30k_train",)
+  TEST: ("flickr30k_val",)
+  NAME: 'flickr30k'
+
+SOLVER:
+  LR_SCHEDULER_NAME: "WarmupMultiStepLR"  ## "WarmupPolyLR"
+  IMS_PER_BATCH: 8
+  BASE_LR: 0.02
+  STEPS: (20000, 40000)
+  MAX_ITER: 1000
+  REG_START_ITER: 7500
+  WEIGHT_DECAY: 0.0005
+  WEIGHT_DECAY_BIAS: 0.0005
+  BIAS_LR_FACTOR: 1.0
+  WEIGHT_DECAY_NORM: 0.0005
+  WARMUP_ITERS: 500
+  WARMUP_FACTOR: 0.001
+  POLY_POWER: 0.9
+  POLY_END_LR: 0.00001
+  CHECKPOINT_PERIOD: 4000
+  BACKBONE_LR_FACTOR: 0.1
+  FIX_BACKBONE: True
+  USING_APEX: False
+  OPTIMIZER: "Adam"  # Sgd
+  INIT_PARA: False
+  ATTR_CLS_LOSS: True
+
+
+INPUT:
+  MIN_SIZE_TRAIN: (321,)
+  MIN_SIZE_TEST: 321
+
+SEED: 10
+
+TEST:
+  EVAL_PERIOD: 4000
+
+
+
+
+
